@@ -2,7 +2,7 @@
     $dbhost = 'localhost';
     $dbuser = 'root';
     $dbpass = '1234';
-    $dbname = 'coba';
+    $dbname = 'skripsi';
 
     $db = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
     

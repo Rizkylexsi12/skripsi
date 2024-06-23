@@ -1,16 +1,13 @@
 <?php
-
 class AES256 {
-    private $key;
-    private $blockSize = 16; // AES block size is 16 bytes
+    private $blockSize = 16;
 
-    public function __construct($key) {
-        // Kunci harus panjangnya 32 byte untuk AES-256
+    public function __construct() {
+        $key = "12345678901234567890123456789012";
+
         if (strlen($key) !== 32) {
             echo '<p>Kunci harus panjangnya 32 byte untuk AES-256.</p>';
-            // throw new Exception('Kunci harus panjangnya 32 byte untuk AES-256.');
         }
-        $this->key = $key;
     }
 
     private function pad($data) {
@@ -51,11 +48,11 @@ class AES256 {
     }
 
     private function encryptBlock($block, $iv) {
-        return $this->xorBlocks($block, $iv); // Placeholder for actual AES block encryption
+        return $this->xorBlocks($block, $iv);
     }
 
     private function decryptBlock($block, $iv) {
-        return $this->xorBlocks($block, $iv); // Placeholder for actual AES block decryption
+        return $this->xorBlocks($block, $iv);
     }
 
     private function xorBlocks($block1, $block2) {
@@ -66,16 +63,4 @@ class AES256 {
         return $result;
     }
 }
-
-$key = '1234567890123456789012345678901'; // Panjang kunci harus 32 byte untuk AES-256
-$data = 'Lexsi';
-
-$aes = new AES256($key);
-
-$encrypted_data = $aes->encrypt($data);
-echo '<p> Data terenkripsi: ' . $encrypted_data . "\n </p>";
-
-$decrypted_data = $aes->decrypt($encrypted_data);
-echo '<p> Data terdekripsi: ' . $decrypted_data . "\n </p>";
-
 ?>
