@@ -31,16 +31,21 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label for="password">Password</label>
+                                            <input type="text" class="form-control" name="password">
+                                        </div>
+                                        <div class="form-group">
                                             <label for="nama_lengkap">Nama Lengkap</label>
                                             <input type="text" class="form-control" name="nama_lengkap">
                                         </div>
                                         <div class="form-group">
-                                            <label for="nik">NIK</label>
-                                            <input type="text" class="form-control" name="nik">
-                                        <div style="display: flex; justify-content: space-between; ">
+                                            <label for="nik">Nomor Induk Karyawan</label>
+                                            <input type="text" class="form-control" name="nik" maxlength="10" pattern="\d{10}" title="NIK harus terdiri dari 10 karakter angka">
+                                        </div>
+                                        <div style="display: flex;">
                                             <div class="form-group" style="flex-grow: 2; margin-right: 10px;">
                                                 <label for="no_ktp">No. KTP</label>
-                                                <input type="text" class="form-control" name="no_ktp" maxlength="16">
+                                                <input type="text" class="form-control" name="no_ktp" maxlength="16" pattern="\d{16}" title="No. KTP harus terdiri dari 16 karakter angka">
                                             </div>
                                             <div class="form-group" style="flex-grow: 2; margin-right: 10px;">
                                                 <label for="tempat_lahir">Tempat Lahir</label>
@@ -69,7 +74,7 @@
                                         <div style="display: flex; justify-content: space-around;">
                                             <div class="form-group" style="flex-grow: 2; margin-right: 10px;">
                                                 <label for="nomor_str">Nomor STR</label>
-                                                <input type="text" class="form-control" name="nomor_str">
+                                                <input type="text" class="form-control" name="nomor_str" maxlength="15">
                                             </div>
                                             <div class="form-group" style="flex-grow: 2;">
                                                 <label for="tanggal_str">Tanggal STR</label>
@@ -79,7 +84,7 @@
                                         <div style="display: flex; justify-content: space-around;">
                                             <div class="form-group" style="flex-grow: 2; margin-right: 10px;">
                                                 <label for="nomor_sip">Nomor SIP</label>
-                                                <input type="text" class="form-control" name="nomor_sip">
+                                                <input type="text" class="form-control" name="nomor_sip" maxlength="10">
                                             </div>
                                             <div class="form-group" style="flex-grow: 2;">
                                                 <label for="tanggal_sip">Tanggal SIP</label>

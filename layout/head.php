@@ -11,6 +11,28 @@
     <link rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="assets/css/app.css">
     <link rel="shortcut icon" href="assets/images/favicon-idn.ico" type="image/x-icon">
+    <link rel="stylesheet" href="path/to/your/css/file.css"> <!-- Optional: Add your CSS file for styling -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery library -->
+    <script>
+        $(document).ready(function(){
+            $('#search').keyup(function(){
+                var query = $(this).val();
+
+                if(query.length > 0){
+                    $.ajax({
+                        url: 'search.php', // PHP file to handle AJAX request
+                        method: 'POST', // Method used for AJAX request
+                        data: {query: query},
+                        success: function(data){
+                            $('#search-results').html(data); // Show results in this element
+                        }
+                    });
+                } else {
+                    $('#search-results').html(''); // Clear results if search query is empty
+                }
+            });
+        });
+    </script>
 </head>
 <?php
     require "include/connection.php";

@@ -3,6 +3,7 @@
 
     $username = $_POST['username'];
     $role = $_POST['role'];
+    $password = $_POST['password'];
     $nama_lengkap = $_POST['nama_lengkap'];
     $nik = $_POST['nik'];
     $no_ktp = $_POST['no_ktp'];
@@ -18,7 +19,7 @@
 
     // $x = $db->query($sql);
     // var_dump($x);
-    $sql = "INSERT INTO user (username, role, nama_lengkap, nik, nomor_ktp, tempat_lahir, tanggal_lahir, jenis_kelamin, alamat, nomor_telepon, nomor_str, tanggal_str, nomor_sip, tanggal_sip) VALUES ('$username', '$role', '$nama_lengkap', '$nik', '$no_ktp', '$tempat_lahir', '$tanggal_lahir', '$jenis_kelamin', '$alamat', '$no_telepon', '$nomor_str', '$tanggal_str', '$nomor_sip', '$tanggal_sip')";
+    $sql = "INSERT INTO user (username, role, password, nama_lengkap, nik, nomor_ktp, tempat_lahir, tanggal_lahir, jenis_kelamin, alamat, nomor_telepon, nomor_str, tanggal_str, nomor_sip, tanggal_sip) VALUES ('$username', '$role', '$password', '$nama_lengkap', '$nik', '$no_ktp', '$tempat_lahir', '$tanggal_lahir', '$jenis_kelamin', '$alamat', '$no_telepon', '$nomor_str', '$tanggal_str', '$nomor_sip', '$tanggal_sip')";
     
     if ($db->query($sql) === true) {
         header("location:user.php");

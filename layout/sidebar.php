@@ -31,13 +31,10 @@
                         <li class="submenu-item ">
                             <a href="pasien.php" style="color: #169859;">Master Pasien</a>
                         </li>
-                        <li class="submenu-item ">
-                            <a href="pasien.php" style="color: #169859;">Ubah Password</a>
-                        </li>
                     </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a href="matrik.php" class='sidebar-link' style="color: #169859;">
+                    <a href="lakukan_pemeriksaan.php" class='sidebar-link' style="color: #169859;">
                         <i class="bi bi-file-earmark-check-fill" style="color: #169859;"></i>
                         <span>Lakukan Pemeriksaan</span>
                     </a>

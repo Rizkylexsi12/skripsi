@@ -13,11 +13,6 @@
         <div id="app">
             <?php require "layout/sidebar.php";?>
             <div id="main">
-                <header class="mb-3">
-                    <a href="#" class="burger-btn d-block d-xl-none">
-                        <i class="bi bi-justify fs-3"></i>
-                    </a>
-                </header>
                 <div class="page-heading">
                     <h3>Detail Pasien</h3>
                 </div>
@@ -85,7 +80,9 @@
                                     <label for="basicInput">Riwayat Alergi</label>
                                     <input type="text" class="form-control" name="riwayat_alergi" value="<?=$row['riwayat_alergi'];?>" disabled>
                                 </div>
-                                <button class="btn btn-secondary btn-md"><a href="pasien.php" style="text-decoration: none; color: inherit;">Kembali</a></button>
+                                <div style="margin-top: 0.5rem">
+                                    <button class="btn btn-secondary btn-md"><a href="pasien.php" style="text-decoration: none; color: inherit;">Kembali</a></button>
+                                </div>
                                 </form>
                             </div>
                         </div>

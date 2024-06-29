@@ -15,11 +15,6 @@
     <div id="app">
         <?php require "layout/sidebar.php";?>
         <div id="main">
-            <header class="mb-3">
-                <a href="#" class="burger-btn d-block d-xl-none">
-                    <i class="bi bi-justify fs-3"></i>
-                </a>
-            </header>
             <div class="page-heading">
                 <h3>Edit User</h3>
             </div>
@@ -45,12 +40,17 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label for="password">Password</label>
+                                            <input type="text" class="form-control" name="password" value="<?=$row['password'];?>">
+                                        </div>
+                                        <div class="form-group">
                                             <label for="nama_lengkap">Nama Lengkap</label>
                                             <input type="text" class="form-control" name="nama_lengkap" value="<?=$row['nama_lengkap'];?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="nik">NIK</label>
                                             <input type="text" class="form-control" name="nik" value="<?=$row['nik'];?>">
+                                        </div>
                                         <div style="display: flex; justify-content: space-between;">
                                             <div class="form-group" style="flex-grow: 2; margin-right: 10px;">
                                                 <label for="no_ktp">No. KTP</label>
