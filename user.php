@@ -16,10 +16,18 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-content">
-                                <div class="card-body">
-                                    <p class="card-text">
-                                        Data-data berikut menampilkan data user :
-                                    </p>
+                            <div class="card-body">
+                                    <form method="GET" action="">
+                                        <div>
+                                            <label for="basicInput">Cari User :</label>
+                                            <div class="form-group"  style="display: flex;">
+                                                <input type="text" class="form-control" name="search" style="margin-right: 20px;">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Cari</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div class="ml-auto">
                                     <button type="button" class="btn btn-outline-success btn-sm" style="margin-left: 20px;">
@@ -29,28 +37,46 @@
                                 <hr>
                                 <div class="table-responsive">
                                     <table class="table table-border table-striped mb-0" style="width: 1250px; margin: 0px 30px;">
-                                        <caption> Tabel User </caption>
-                                        <tr>
-                                            <th class="text-center">No.</th>
-                                            <th class="text-center">Username</th>
-                                            <th class="text-center">Nama Lengkap</th>
-                                            <th class="text-center">Role</th>
-                                            <th class="text-center">Action</th>
-                                        </tr>
                                         <?php
                                             include 'include/connection.php';
                                             include 'aes.php';
 
+                                            $search = isset($_GET['search']) ? $_GET['search'] : '';
+
                                             $sql = 'SELECT * FROM user';
+                                            if ($search) {
+                                                $sql .= " WHERE username LIKE '%" . $db->real_escape_string($search) . "%'";
+                                            }
+
                                             $result = $db->query($sql);
                                             $i = 1;
+                                            $found = false;
+
                                             while ($row = $result->fetch_object()) {
-                                                echo "<tr>
-                                                    <td class='text-center'>" . ($i++) . "</td>
-                                                    <td class='text-center'>$row->username</td>
-                                                    <td class='text-center'>$row->nama_lengkap</td>
-                                                    <td class='text-center'>$row->role</td>
-                                                    <td class='text-center'>
+                                                $found = true;
+                                            }
+
+                                            if ($found) {
+                                                $result = $db->query($sql);
+                                            
+                                                echo '<div class="table-responsive">
+                                                    <table class="table table-border table-striped mb-0" style="width: 1250px;margin-left: 30px;margin-right: 30px;">
+                                                        <caption> Tabel User </caption>
+                                                        <tr>
+                                                            <th class="text-center">No.</th>
+                                                            <th class="text-center">Username</th>
+                                                            <th class="text-center">Nama Lengkap</th>
+                                                            <th class="text-center">Role</th>
+                                                            <th class="text-center">Action</th>
+                                                        </tr>';
+
+                                                while ($row = $result->fetch_object()) {
+                                                    echo "<tr>
+                                                        <td class='text-center'>" . ($i++) . "</td>
+                                                        <td class='text-center'>$row->username</td>
+                                                        <td class='text-center'>$row->nama_lengkap</td>
+                                                        <td class='text-center'>$row->role</td>
+                                                        <td class='text-center'>
                                                         <div class='btn-group mb-1'>
                                                             <div class='dropdown text-center'>
                                                                 <button class='btn btn-sm' type='button' style='background-color: #169859;color: white;'>
@@ -66,7 +92,13 @@
                                                         </div>
                                                     </td>
                                                   </tr>\n";
+                                                }
+                                                echo '</table>
+                                                </div>';
+                                            } else {
+                                                echo "<p class='text-center'>Data tidak ditemukan.</p>";
                                             }
+
                                             $result->free();
                                         ?>
                                     </table>

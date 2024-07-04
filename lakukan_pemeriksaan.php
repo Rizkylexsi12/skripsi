@@ -78,14 +78,11 @@
                                                         <td class='text-center'>
                                                             <div class='btn-group mb-1'>
                                                                 <div class='dropdown text-center'>
-                                                                    <button class='btn btn-sm' type='button' style='background-color: #169859;color: white;'>
+                                                                    <button class='btn btn-outline-primary btn-sm' type='button'>
                                                                         <a href='pasien_detail.php?id={$row->pasien_id}' style='text-decoration: none; color: inherit;'>Detail</a>
                                                                     </button>
-                                                                    <button class='btn btn-secondary btn-sm' type='button'>
-                                                                        <a href='pasien_edit.php?id={$row->pasien_id}' style='text-decoration: none; color: inherit;'>Edit</a>
-                                                                    </button>
-                                                                    <button class='btn btn-danger btn-sm' type='button'>
-                                                                        <a href='pasien_hapus.php?id={$row->pasien_id}' style='text-decoration: none; color: inherit;'>Delete</a>
+                                                                    <button class='btn btn-success btn-sm' type='button'>
+                                                                        <a href='input_pemeriksaan.php?id={$row->pasien_id}' style='text-decoration: none; color: inherit;'>Periksa</a>
                                                                     </button>
                                                                 </div>
                                                             </div>

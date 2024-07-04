@@ -37,3 +37,20 @@
     //     echo "Error: " . $sql . "<br>" . $db->error;
     // }
 ?>
+
+<?php
+    require "include/connection.php";
+    include 'aes_new.php';
+
+    $nama_pasien = $_POST['nama_pasien'];
+    $subjective = $_POST['subjective'];
+
+    $sql = "INSERT INTO pasien (nama_pasien) VALUES ('$nama_pasien')";
+    $sql2 = "INSERT INTO pemeriksaan (subjective) VALUES ('$subjective')";
+
+    if ($db->query($sql) === true && $db->query($sql) === true) {
+        header("location:pasien.php");
+    } else {
+        echo "Error: " . $sql . "<br>" . $db->error;
+    }
+?>

@@ -7,8 +7,11 @@
     $cek = mysqli_num_rows($login);
 
     if ($cek > 0) {
+        $data = mysqli_fetch_assoc($login);
+
         session_start();
         $_SESSION['username'] = $username;
+        $_SESSION['user_id'] = $data['user_id'];
         $_SESSION['status'] = "login";
         header("location:index.php");
     } else {
