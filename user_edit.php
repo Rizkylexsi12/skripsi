@@ -1,6 +1,9 @@
 <?php
     require "include/connection.php";
-    
+    require "aes_new.php";
+
+    $aes = new AES256();
+
     $id = $_GET['id'];
     $sql = "SELECT * FROM user WHERE user_id = '$id' ";
     $result = $db->query($sql);
@@ -28,12 +31,12 @@
                                         <div style="display: flex; justify-content: space-around;">
                                             <div class="form-group" style="flex-grow: 2; margin-right: 10px;">
                                                 <label for="username">Username</label>
-                                                <input type="text" class="form-control" name="user_id" value="<?=$row['user_id'];?>" hidden>
-                                                <input type="text" class="form-control" name="username" value="<?=$row['username'];?>">
+                                                <input type="text" class="form-control" name="user_id" value="<?=$aes->decrypt($row['user_id']);?>" hidden>
+                                                <input type="text" class="form-control" name="username" value="<?=$aes->decrypt($row['username']);?>">
                                             </div>
                                             <div class="form-group" style="flex-grow: 2;">
                                                 <label for="role">Role</label>
-                                                <select class="form-control form-select" name="role" value="<?=$row['role'];?>">
+                                                <select class="form-control form-select" name="role" value="<?=$aes->decrypt($row['role']);?>">
                                                     <option value="petugas">Petugas</option>
                                                     <option value="dokter">Dokter</option>
                                                 </select>
@@ -41,32 +44,32 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="password">Password</label>
-                                            <input type="text" class="form-control" name="password" value="<?=$row['password'];?>">
+                                            <input type="text" class="form-control" name="password" value="<?=$aes->decrypt($row['password']);?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="nama_lengkap">Nama Lengkap</label>
-                                            <input type="text" class="form-control" name="nama_lengkap" value="<?=$row['nama_lengkap'];?>">
+                                            <input type="text" class="form-control" name="nama_lengkap" value="<?=$aes->decrypt($row['nama_lengkap']);?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="nik">NIK</label>
-                                            <input type="text" class="form-control" name="nik" value="<?=$row['nik'];?>">
+                                            <input type="text" class="form-control" name="nik" value="<?=$aes->decrypt($row['nik']);?>">
                                         </div>
                                         <div style="display: flex; justify-content: space-between;">
                                             <div class="form-group" style="flex-grow: 2; margin-right: 10px;">
                                                 <label for="no_ktp">No. KTP</label>
-                                                <input type="text" class="form-control" name="no_ktp" maxlength="16" value="<?=$row['nomor_ktp'];?>">
+                                                <input type="text" class="form-control" name="no_ktp" maxlength="16" value="<?=$aes->decrypt($row['nomor_ktp']);?>">
                                             </div>
                                             <div class="form-group" style="flex-grow: 2; margin-right: 10px;">
                                                 <label for="tempat_lahir">Tempat Lahir</label>
-                                                <input type="text" class="form-control" name="tempat_lahir" value="<?=$row['tempat_lahir'];?>">
+                                                <input type="text" class="form-control" name="tempat_lahir" value="<?=$aes->decrypt($row['tempat_lahir']);?>">
                                             </div>
                                             <div class="form-group" style="flex-grow: 2; margin-right: 10px;">
                                                 <label for="tanggal_lahir">Tanggal Lahir</label>
-                                                <input type="date" class="form-control" name="tanggal_lahir" value="<?=$row['tanggal_lahir'];?>">
+                                                <input type="date" class="form-control" name="tanggal_lahir" value="<?=$aes->decrypt($row['tanggal_lahir']);?>">
                                             </div>
                                             <div class="form-group" style="flex-grow: 2;">
                                                 <label for="jenis_kelamin">Jenis Kelamin</label>
-                                                <select class="form-control form-select" name="jenis_kelamin" value="<?=$row['jenis_kelamin'];?>">
+                                                <select class="form-control form-select" name="jenis_kelamin" value="<?=$aes->decrypt($row['jenis_kelamin']);?>">
                                                     <option value="L">Laki - Laki</option>
                                                     <option value="P">Perempuan</option>
                                                 </select>
@@ -74,30 +77,30 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="alamat">Alamat</label>
-                                            <input type="text" class="form-control" name="alamat" value="<?=$row['alamat'];?>">
+                                            <input type="text" class="form-control" name="alamat" value="<?=$aes->decrypt($row['alamat']);?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="no_telepon">No. Telp</label>
-                                            <input type="text" class="form-control" name="no_telepon" maxlength="13" value="<?=$row['nomor_telepon'];?>">
+                                            <input type="text" class="form-control" name="no_telepon" maxlength="13" value="<?=$aes->decrypt($row['nomor_telepon']);?>">
                                         </div>
                                         <div style="display: flex; justify-content: space-around;">
                                             <div class="form-group" style="flex-grow: 2; margin-right: 10px;">
                                                 <label for="nomor_str">Nomor STR</label>
-                                                <input type="text" class="form-control" name="nomor_str" value="<?=$row['nomor_str'];?>">
+                                                <input type="text" class="form-control" name="nomor_str" value="<?=$aes->decrypt($row['nomor_str']);?>">
                                             </div>
                                             <div class="form-group" style="flex-grow: 2;">
                                                 <label for="tanggal_str">Tanggal STR</label>
-                                                <input type="date" class="form-control" name="tanggal_str" value="<?=$row['tanggal_str'];?>">
+                                                <input type="date" class="form-control" name="tanggal_str" value="<?=$aes->decrypt($row['tanggal_str']);?>">
                                             </div>
                                         </div>
                                         <div style="display: flex; justify-content: space-around;">
                                             <div class="form-group" style="flex-grow: 2; margin-right: 10px;">
                                                 <label for="nomor_sip">Nomor SIP</label>
-                                                <input type="text" class="form-control" name="nomor_sip" value="<?=$row['nomor_sip'];?>">
+                                                <input type="text" class="form-control" name="nomor_sip" value="<?=$aes->decrypt($row['nomor_sip']);?>">
                                             </div>
                                             <div class="form-group" style="flex-grow: 2;">
                                                 <label for="tanggal_sip">Tanggal SIP</label>
-                                                <input type="date" class="form-control" name="tanggal_sip" value="<?=$row['tanggal_sip'];?>">
+                                                <input type="date" class="form-control" name="tanggal_sip" value="<?=$aes->decrypt($row['tanggal_sip']);?>">
                                             </div>
                                         </div>
                                         <div style="margin-top: 0.5rem">

@@ -1,5 +1,8 @@
 <?php
 require "include/connection.php";
+require "aes_new.php";
+
+$aes = new AES256();
 
 $id = $_GET['id'];
 $sql = "SELECT * FROM pasien WHERE pasien_id = '$id'";
@@ -28,34 +31,32 @@ $row = $result->fetch_array();
                         <div class="row">
                             <div class="col">
                                 <form action="input_pemeriksaan_action.php" method="POST">
-                                    <!-- Tambahkan hidden input untuk user_id -->
                                     <input type="hidden" name="user_id" value="<?=$user_id;?>">
                                     <input type="hidden" name="pasien_id" value="<?=$id;?>">
-                                    
                                     <div style="display: flex;">
                                         <div class="form-group" style="margin-right: 20px; width: 400px;">
                                             <label for="tinggiBadan">Nama Pasien</label>
-                                            <input type="text" class="form-control" name="no_ktp" value="<?=$row['nama_pasien'];?>" disabled>
+                                            <input type="text" class="form-control" name="no_ktp" value="<?=$aes->($row['nama_pasien']);?>" disabled>
                                         </div>
                                         <div class="form-group" style="margin-right: 20px; width: 400px;">
                                             <label for="beratBadan">Tanggal Lahir</label>
-                                            <input type="text" class="form-control" name="tempat_lahir" value="<?=$row['tempat_lahir'];?>" disabled>
+                                            <input type="text" class="form-control" name="tempat_lahir" value="<?=$aes->($row['tempat_lahir']);?>" disabled>
                                         </div>
                                         <div class="form-group" style="margin-right: 20px; width: 300px;">
                                             <label for="beratBadan">Jenis Kelamin</label>
-                                            <input type="date" class="form-control" name="tanggal_lahir" value="<?=$row['tanggal_lahir'];?>" disabled>
+                                            <input type="date" class="form-control" name="tanggal_lahir" value="<?=$aes->($row['tanggal_lahir']);?>" disabled>
                                         </div>
                                         <div class="form-group" style="width: 300px;">
                                             <label for="basicInput">Golongan Darah</label>
                                             <select class="form-control form-select" name="jenis_kelamin" disabled>
-                                                <option value="L" <?=($row['jenis_kelamin'] == 'L') ? 'selected' : '';?>>Laki - Laki</option>
-                                                <option value="P" <?=($row['jenis_kelamin'] == 'P') ? 'selected' : '';?>>Perempuan</option>
+                                                <option value="L" <?=$aes->(($row['jenis_kelamin']) == 'L') ? 'selected' : '';?>>Laki - Laki</option>
+                                                <option value="P" <?=$aes->(($row['jenis_kelamin']) == 'P') ? 'selected' : '';?>>Perempuan</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="basicInput">Riwayat Alergi</label>
-                                        <input type="text" class="form-control" name="riwayat_alergi" value="<?=$row['riwayat_alergi'];?>" disabled>
+                                        <input type="text" class="form-control" name="riwayat_alergi" value="<?=$aes->($row['riwayat_alergi']);?>" disabled>
                                     </div>
                                     <hr>
                                     <h3>Subjective</h3>

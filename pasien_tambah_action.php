@@ -16,39 +16,21 @@
 
     $aes = new AES256();
 
-    $encrypted_nama_pasien = $aes->encrypt($nama_pasien);
-    $encrypted_no_ktp = $aes->encrypt($no_ktp);
+    $encrypt_nama_pasien = $aes->encrypt($nama_pasien);
+    $encrypt_no_ktp = $aes->encrypt($no_ktp);
+    $encrypt_tempat_lahir = $aes->encrypt($tempat_lahir);
+    $encrypt_tanggal_lahir = $aes->encrypt($tanggal_lahir);
+    $encrypt_jenis_kelamin = $aes->encrypt($jenis_kelamin);
+    $encrypt_alamat = $aes->encrypt($alamat);
+    $encrypt_no_telepon = $aes->encrypt($no_telepon);
+    $encrypt_tinggi_badan = $aes->encrypt($tinggi_badan);
+    $encrypt_berat_badan = $aes->encrypt($berat_badan);
+    $encrypt_golongan_darah = $aes->encrypt($golongan_darah);
+    $encrypt_riwayat_alergi = $aes->encrypt($riwayat_alergi);
 
-    $sql = "INSERT INTO pasien (nama_pasien, nomor_ktp, tempat_lahir, tanggal_lahir, jenis_kelamin, alamat, nomor_telepon, tinggi_badan, berat_badan, golongan_darah, riwayat_alergi) VALUES ('$encrypted_nama_pasien', '$encrypted_no_ktp', '$tempat_lahir', '$tanggal_lahir', '$jenis_kelamin', '$alamat', '$no_telepon', '$tinggi_badan', '$berat_badan', '$golongan_darah', '$riwayat_alergi')";
+    $sql = "INSERT INTO pasien (nama_pasien, nomor_ktp, tempat_lahir, tanggal_lahir, jenis_kelamin, alamat, nomor_telepon, tinggi_badan, berat_badan, golongan_darah, riwayat_alergi) VALUES ('$encrypt_nama_pasien', '$encrypt_no_ktp', '$encrypt_tempat_lahir', '$encrypt_tanggal_lahir', '$encrypt_jenis_kelamin', '$encrypt_alamat', '$encrypt_no_telepon', '$encrypt_tinggi_badan', '$encrypt_berat_badan', '$encrypt_golongan_darah', '$encrypt_riwayat_alergi')";
 
     if ($db->query($sql) === true) {
-        header("location:pasien.php");
-    } else {
-        echo "Error: " . $sql . "<br>" . $db->error;
-    }
-
-    // $x = $db->query($sql);
-    // var_dump($x);
-    // $sql = "INSERT INTO pasien (nama_pasien, nomor_ktp, tempat_lahir, tanggal_lahir, jenis_kelamin, alamat, nomor_telepon, tinggi_badan, berat_badan, golongan_darah, riwayat_alergi) VALUES ('$nama_pasien', '$no_ktp', '$tempat_lahir', '$tanggal_lahir', '$jenis_kelamin', '$alamat', '$no_telepon', '$tinggi_badan', '$berat_badan', '$golongan_darah', '$riwayat_alergi')";
-    
-    // if ($db->query($sql) === true) {
-    //     header("location:pasien.php");
-    // } else {
-    //     echo "Error: " . $sql . "<br>" . $db->error;
-    // }
-?>
-
-<?php
-    require "include/connection.php";
-    include 'aes_new.php';
-
-    $nama_pasien = $_POST['nama_pasien'];
-    $subjective = $_POST['subjective'];
-
-    $sql = "INSERT INTO pasien (nama_pasien) VALUES ('$nama_pasien')";
-    $sql2 = "INSERT INTO pemeriksaan (subjective) VALUES ('$subjective')";
-
-    if ($db->query($sql) === true && $db->query($sql) === true) {
         header("location:pasien.php");
     } else {
         echo "Error: " . $sql . "<br>" . $db->error;

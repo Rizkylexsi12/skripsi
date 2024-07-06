@@ -38,6 +38,9 @@
     require "include/connection.php";
     session_start();
     if ($_SESSION['status'] != 'login') {
+        $_SESSION['user_id'] = $data['user_id'];
+
         header('location:./login.php');
     }
+    $user_id = $_SESSION['user_id']
 ?>

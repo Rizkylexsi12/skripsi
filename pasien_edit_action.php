@@ -1,5 +1,6 @@
 <?php
     require "include/connection.php";
+    require "aes_new.php";
 
     $id = $_POST['pasien_id'];
     $nama_pasien = $_POST['nama_pasien'];
@@ -14,7 +15,22 @@
     $golongan_darah = $_POST['golongan_darah'];
     $riwayat_alergi = $_POST['riwayat_alergi'];
 
-    $sql = "UPDATE pasien SET nama_pasien='$nama_pasien',nomor_ktp='$no_ktp',tempat_lahir='$tempat_lahir',tanggal_lahir='$tanggal_lahir',jenis_kelamin='$jenis_kelamin',alamat='$alamat',nomor_telepon='$no_telepon',tinggi_badan='$tinggi_badan',berat_badan='$berat_badan',golongan_darah='$golongan_darah',riwayat_alergi='$riwayat_alergi' WHERE pasien_id='$id'";
+    $aes = new AES256();
+
+    $encrypt_nama_pasien = $aes->encrypt($nama_pasien);
+    $encrypt_no_ktp = $aes->encrypt($no_ktp);
+    $encrypt_tempat_lahir = $aes->encrypt($tempat_lahir);
+    $encrypt_tanggal_lahir = $aes->encrypt($tanggal_lahir);
+    $encrypt_jenis_kelamin = $aes->encrypt($jenis_kelamin);
+    $encrypt_alamat = $aes->encrypt($alamat);
+    $encrypt_no_telepon = $aes->encrypt($no_telepon);
+    $encrypt_tinggi_badan = $aes->encrypt($tinggi_badan);
+    $encrypt_berat_badan = $aes->encrypt($berat_badan);
+    $encrypt_golongan_darah = $aes->encrypt($golongan_darah);
+    $encrypt_riwayat_alergi = $aes->encrypt($riwayat_alergi);
+
+
+    $sql = "UPDATE pasien SET nama_pasien='$encrypt_nama_pasien',nomor_ktp='$encrypt_no_ktp',tempat_lahir='$encrypt_tempat_lahir',tanggal_lahir='$encrypt_tanggal_lahir',jenis_kelamin='$encrypt_jenis_kelamin',alamat='$encrypt_alamat',nomor_telepon='$encrypt_no_telepon',tinggi_badan='$encrypt_tinggi_badan',berat_badan='$encrypt_berat_badan',golongan_darah='$encrypt_golongan_darah',riwayat_alergi='$encrypt_riwayat_alergi' WHERE pasien_id='$id'";
     
     $result = $db->query($sql);
 

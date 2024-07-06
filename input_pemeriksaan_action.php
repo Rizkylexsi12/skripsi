@@ -1,7 +1,6 @@
 <?php
     require "include/connection.php";
 
-    // $user_id = $_SESSION['user_id'];
     $user_id = $_POST['user_id'];
     $pasien_id = $_POST['pasien_id'];
     $subjective = $_POST['keluhan_utama'];

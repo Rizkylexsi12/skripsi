@@ -60,26 +60,26 @@
                                                     <table class="table table-border table-striped mb-0" style="width: 1250px;margin-left: 30px;margin-right: 30px;">
                                                         <caption> Tabel User </caption>
                                                         <tr>
-                                                            <th class="text-center">No.</th>
-                                                            <th class="text-center">Nama Pasien</th>
-                                                            <th class="text-center">Tanggal Lahir</th>
-                                                            <th class="text-center">Jenis Kelamin</th>
-                                                            <th class="text-center">Golongan Darah</th>
-                                                            <th class="text-center">Actions</th>
+                                                            <th class="text-center" style="width: 30px">No.</th>
+                                                            <th class="text-center" style="width: 80px">Nama Pasien</th>
+                                                            <th class="text-center" style="width: 50px">Tanggal Lahir</th>
+                                                            <th class="text-center" style="width: 40px">Jenis Kelamin</th>
+                                                            <th class="text-center" style="width: 40px">Golongan Darah</th>
+                                                            <th class="text-center" style="width: 40px">Actions</th>
                                                         </tr>';
                                         
                                                 while ($row = $result->fetch_object()) {
                                                     echo "<tr>
                                                         <td class='text-center'>" . ($i++) . "</td>
-                                                        <td class='text-center'>$row->nama_pasien</td>
-                                                        <td class='text-center'>$row->tanggal_lahir</td>
-                                                        <td class='text-center'>$row->jenis_kelamin</td>
-                                                        <td class='text-center'>$row->golongan_darah</td>
+                                                        <td class='text-center'>". $aes->decrypt($row->nama_pasien) ."</td>
+                                                        <td class='text-center'>". $aes->decrypt($row->tanggal_lahir) ."</td>
+                                                        <td class='text-center'>". $aes->decrypt($row->jenis_kelamin) ."</td>
+                                                        <td class='text-center'>". $aes->decrypt($row->golongan_darah) ."</td>
                                                         <td class='text-center'>
                                                             <div class='btn-group mb-1'>
                                                                 <div class='dropdown text-center'>
                                                                     <button class='btn btn-outline-primary btn-sm' type='button'>
-                                                                        <a href='pasien_detail.php?id={$row->pasien_id}' style='text-decoration: none; color: inherit;'>Detail</a>
+                                                                        <a href='detail_pemeriksaan.php?id={$row->pasien_id}' style='text-decoration: none; color: inherit;'>Detail</a>
                                                                     </button>
                                                                     <button class='btn btn-success btn-sm' type='button'>
                                                                         <a href='input_pemeriksaan.php?id={$row->pasien_id}' style='text-decoration: none; color: inherit;'>Periksa</a>

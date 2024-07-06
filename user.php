@@ -16,7 +16,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-content">
-                            <div class="card-body">
+                                <div class="card-body">
                                     <form method="GET" action="">
                                         <div>
                                             <label for="basicInput">Cari User :</label>
@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="ml-auto">
                                     <button type="button" class="btn btn-outline-success btn-sm" style="margin-left: 20px;">
-                                        <a href="user_tambah.php" style="text-decoration: none; color: inherit;">Tambah User</a>
+                                    <a href="user_tambah.php" style="text-decoration: none; color: inherit;">Tambah User</a>
                                     </button>
                                 </div>
                                 <hr>
@@ -39,7 +39,9 @@
                                     <table class="table table-border table-striped mb-0" style="width: 1250px; margin: 0px 30px;">
                                         <?php
                                             include 'include/connection.php';
-                                            include 'aes.php';
+                                            include 'aes_new.php';
+
+                                            $aes = new AES256();
 
                                             $search = isset($_GET['search']) ? $_GET['search'] : '';
 
@@ -47,15 +49,15 @@
                                             if ($search) {
                                                 $sql .= " WHERE username LIKE '%" . $db->real_escape_string($search) . "%'";
                                             }
-
+                                        
                                             $result = $db->query($sql);
                                             $i = 1;
                                             $found = false;
-
+                                        
                                             while ($row = $result->fetch_object()) {
                                                 $found = true;
                                             }
-
+                                            
                                             if ($found) {
                                                 $result = $db->query($sql);
                                             
@@ -63,19 +65,19 @@
                                                     <table class="table table-border table-striped mb-0" style="width: 1250px;margin-left: 30px;margin-right: 30px;">
                                                         <caption> Tabel User </caption>
                                                         <tr>
-                                                            <th class="text-center">No.</th>
-                                                            <th class="text-center">Username</th>
-                                                            <th class="text-center">Nama Lengkap</th>
-                                                            <th class="text-center">Role</th>
-                                                            <th class="text-center">Action</th>
+                                                            <th class="text-center" style="width: 50px">No.</th>
+                                                            <th class="text-center" style="width: 100px">Username</th>
+                                                            <th class="text-center" style="width: 100px">Nama Lengkap</th>
+                                                            <th class="text-center" style="width: 100px">Role</th>
+                                                            <th class="text-center" style="width: 100px">Action</th>
                                                         </tr>';
-
+                                            
                                                 while ($row = $result->fetch_object()) {
                                                     echo "<tr>
                                                         <td class='text-center'>" . ($i++) . "</td>
-                                                        <td class='text-center'>$row->username</td>
-                                                        <td class='text-center'>$row->nama_lengkap</td>
-                                                        <td class='text-center'>$row->role</td>
+                                                        <td class='text-center'>". $aes->decrypt($row->username) ."</td>
+                                                        <td class='text-center'>". $aes->decrypt($row->nama_lengkap). "</td>
+                                                        <td class='text-center'>". $aes->decrypt($row->role) ."</td>
                                                         <td class='text-center'>
                                                         <div class='btn-group mb-1'>
                                                             <div class='dropdown text-center'>
@@ -98,10 +100,11 @@
                                             } else {
                                                 echo "<p class='text-center'>Data tidak ditemukan.</p>";
                                             }
-
+                                            
                                             $result->free();
-                                        ?>
-                                    </table>
+                                            ?>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
