@@ -1,8 +1,6 @@
 <?php
 include 'include/connection.php';
-include 'aes_new.php';
-
-$aes = new AES256();
+include 'looping_generator.php';
 
 $username = $_POST['username'];
 $password = $_POST['password'];
@@ -14,8 +12,8 @@ $data_user = [];
 while ($row = $result->fetch_object()) {
     $data_user[] = [
         'user_id' => $row->user_id,
-        'username' => $aes->decrypt($row->username),
-        'password' => $aes->decrypt($row->password),
+        'username' => decrypt($row->username, $aes),
+        'password' => decrypt($row->password, $aes)
     ];
 }
 

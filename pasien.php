@@ -39,9 +39,7 @@
                                     <table class="table table-border table-striped mb-0" style="width: 1250px;margin-left: 30px;margin-right: 30px;">
                                         <?php
                                             include 'include/connection.php';
-                                            include 'aes_new.php';
-
-                                            $aes = new AES256();
+                                            include 'looping_generator.php';
 
                                             $search = isset($_GET['search']) ? $_GET['search'] : '';
 
@@ -50,16 +48,16 @@
 
                                             $data_pasien = [];
                                             while ($row = $result->fetch_object()) {
-                                                $decrypted_name = $aes->decrypt($row->nama_pasien);
+                                                $decrypted_name = decrypt($row->nama_pasien, $aes);
                                                 if ($search && stripos($decrypted_name, $search) === false) {
                                                     continue;
                                                 }
                                                 $data_pasien[] = [
                                                     'id' => $row->pasien_id,
                                                     'nama_pasien' => $decrypted_name,
-                                                    'tanggal_lahir' => $aes->decrypt($row->tanggal_lahir),
-                                                    'jenis_kelamin' => $aes->decrypt($row->jenis_kelamin),
-                                                    'golongan_darah' => $aes->decrypt($row->golongan_darah)
+                                                    'tanggal_lahir' => decrypt($row->tanggal_lahir, $aes),
+                                                    'jenis_kelamin' => decrypt($row->jenis_kelamin, $aes),
+                                                    'golongan_darah' => decrypt($row->golongan_darah, $aes)
                                                 ];
                                             }
                                         
@@ -80,7 +78,7 @@
                                                 foreach ($data_pasien as $pasien) {
                                                     echo "<tr>
                                                         <td class='text-center'>" . ($i++) . "</td>
-                                                        <td class='text-center'>". $pasien['nama_pasien'] ."</td>
+                                                        <td>". $pasien['nama_pasien'] ."</td>
                                                         <td class='text-center'>". $pasien['tanggal_lahir'] ."</td>
                                                         <td class='text-center'>". $pasien['jenis_kelamin'] ."</td>
                                                         <td class='text-center'>". $pasien['golongan_darah'] ."</td>

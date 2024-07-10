@@ -39,28 +39,28 @@
                                     <table class="table table-border table-striped mb-0" style="width: 1250px; margin: 0px 30px;">
                                         <?php
                                             include 'include/connection.php';
-                                            include 'aes_new.php';
-
-                                            $aes = new AES256();
+                                            include 'looping_generator.php';
 
                                             $search = isset($_GET['search']) ? $_GET['search'] : '';
 
                                             $sql = 'SELECT * FROM user';
-                                            if ($search) {
-                                                $sql .= " WHERE username LIKE '%" . $db->real_escape_string($search) . "%'";
-                                            }
-                                        
                                             $result = $db->query($sql);
-                                            $i = 1;
-                                            $found = false;
-                                        
+
+                                            $data_user = [];
                                             while ($row = $result->fetch_object()) {
-                                                $found = true;
+                                                $decrypted_name = decrypt($row->username, $aes);
+                                                if ($search && stripos($decrypted_name, $search) === false) {
+                                                    continue;
+                                                }
+                                                $data_user[] = [
+                                                    'id' => $row->user_id,
+                                                    'username' => $decrypted_name,
+                                                    'nama_lengkap' => decrypt($row->nama_lengkap, $aes),
+                                                    'role' => decrypt($row->role, $aes),
+                                                ];
                                             }
                                             
-                                            if ($found) {
-                                                $result = $db->query($sql);
-                                            
+                                            if (!empty($data_user)) {
                                                 echo '<div class="table-responsive">
                                                     <table class="table table-border table-striped mb-0" style="width: 1250px;margin-left: 30px;margin-right: 30px;">
                                                         <caption> Tabel User </caption>
@@ -71,24 +71,24 @@
                                                             <th class="text-center" style="width: 100px">Role</th>
                                                             <th class="text-center" style="width: 100px">Action</th>
                                                         </tr>';
-                                            
-                                                while ($row = $result->fetch_object()) {
+                                                $i = 1;
+                                                foreach ($data_user as $user) {
                                                     echo "<tr>
                                                         <td class='text-center'>" . ($i++) . "</td>
-                                                        <td class='text-center'>". $aes->decrypt($row->username) ."</td>
-                                                        <td class='text-center'>". $aes->decrypt($row->nama_lengkap). "</td>
-                                                        <td class='text-center'>". $aes->decrypt($row->role) ."</td>
+                                                        <td class='text-center'>". $user['username'] ."</td>
+                                                        <td class='text-center'>". $user['nama_lengkap'] ."</td>
+                                                        <td class='text-center'>". ($user['role'] == 'petugas' ? 'Petugas' : 'Dokter') ."</td>
                                                         <td class='text-center'>
                                                         <div class='btn-group mb-1'>
                                                             <div class='dropdown text-center'>
                                                                 <button class='btn btn-sm' type='button' style='background-color: #169859;color: white;'>
-                                                                    <a href='user_detail.php?id={$row->user_id}' style='text-decoration: none; color: inherit;'>Detail</a>
+                                                                    <a href='user_detail.php?id={$user['id']}' style='text-decoration: none; color: inherit;'>Detail</a>
                                                                 </button>
                                                                 <button class='btn btn-secondary btn-sm' type='button'>
-                                                                    <a href='user_edit.php?id={$row->user_id}' style='text-decoration: none; color: inherit;'>Edit</a>
+                                                                    <a href='user_edit.php?id={$user['id']}' style='text-decoration: none; color: inherit;'>Edit</a>
                                                                 </button>
                                                                 <button class='btn btn-danger btn-sm' type='button'>
-                                                                    <a href='user_hapus.php?id={$row->user_id}' style='text-decoration: none; color: inherit;'>Delete</a>
+                                                                    <a href='user_hapus.php?id={$user['id']}' style='text-decoration: none; color: inherit;'>Delete</a>
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -102,7 +102,7 @@
                                             }
                                             
                                             $result->free();
-                                            ?>
+                                        ?>
                                         </table>
                                     </div>
                                 </div>

@@ -1,5 +1,6 @@
 <?php
 require "include/connection.php";
+include 'looping_generator.php';
 
 $id = $_GET['id'];
 
@@ -42,28 +43,28 @@ $result2 = $db->query($sql2);
                                 <div style="display: flex;">
                                     <div class="form-group" style="margin-right: 20px; width: 400px;">
                                         <label for="tinggiBadan">Nama Pasien</label>
-                                        <input type="text" class="form-control" name="no_ktp" value="<?=$row['nama_pasien'];?>" disabled>
+                                        <input type="text" class="form-control" name="no_ktp" value="<?=decrypt($row['nama_pasien'], $aes);?>" disabled>
                                     </div>
                                     <div class="form-group" style="margin-right: 20px; width: 400px;">
                                         <label for="beratBadan">Tempat Lahir</label>
-                                        <input type="text" class="form-control" name="tempat_lahir" value="<?=$row['tempat_lahir'];?>" disabled>
+                                        <input type="text" class="form-control" name="tempat_lahir" value="<?=decrypt($row['tempat_lahir'], $aes);?>" disabled>
                                     </div>
                                     <div class="form-group" style="margin-right: 20px; width: 300px;">
                                         <label for="beratBadan">Tanggal Lahir</label>
-                                        <input type="date" class="form-control" name="tanggal_lahir" value="<?=$row['tanggal_lahir'];?>" disabled>
+                                        <input type="date" class="form-control" name="tanggal_lahir" value="<?=decrypt($row['tanggal_lahir'], $aes);?>" disabled>
                                     </div>
                                     <div class="form-group" style="width: 300px;">
                                         <label for="basicInput">Jenis Kelamin</label>
                                         <select class="form-control form-select" name="jenis_kelamin" disabled>
-                                            <option value="L" <?=($row['jenis_kelamin'] == 'L') ? 'selected' : '';?>>Laki - Laki</option>
-                                            <option value="P" <?=($row['jenis_kelamin'] == 'P') ? 'selected' : '';?>>Perempuan</option>
+                                            <option value="L" <?=decrypt($row['jenis_kelamin'], $aes) == 'L' ? 'selected' : '';?>>Laki - Laki</option>
+                                            <option value="P" <?=decrypt($row['jenis_kelamin'], $aes) == 'P' ? 'selected' : '';?>>Perempuan</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="basicInput">Riwayat Alergi</label>
                                     <div style="display: flex;">
-                                        <input type="text" class="form-control" name="riwayat_alergi" value="<?=$row['riwayat_alergi'];?>" disabled style="margin-right: 10px;">
+                                        <input type="text" class="form-control" name="riwayat_alergi" value="<?=decrypt($row['riwayat_alergi'], $aes);?>" disabled style="margin-right: 10px;">
                                         <div style="margin-right: 10px;">
                                             <button class="btn btn-success btn-md"><a href="input_pemeriksaan.php?id=<?= $row['pasien_id']; ?>" style="text-decoration: none; color: inherit;">Periksa</a></button>
                                         </div>
@@ -92,11 +93,11 @@ $result2 = $db->query($sql2);
                                         while ($row2 = $result2->fetch_object()): ?>
                                             <tr>
                                                 <td class='text-center'><?=$i++;?></td>
-                                                <td class='text-center'><?=$row2->tanggal_kunjungan;?></td>
-                                                <td class='text-center'><?=$row2->subjective;?></td>
-                                                <td class='text-center'><?=$row2->objective;?></td>
-                                                <td class='text-center'><?=$row2->assessment;?></td>
-                                                <td class='text-center'><?=$row2->plan;?></td>
+                                                <td class='text-center'><?=decrypt($row2->tanggal_kunjungan, $aes);?></td>
+                                                <td class='text-center'><?=decrypt($row2->subjective, $aes);?></td>
+                                                <td class='text-center'><?=decrypt($row2->objective, $aes);?></td>
+                                                <td class='text-center'><?=decrypt($row2->assessment, $aes);?></td>
+                                                <td class='text-center'><?=decrypt($row2->plan, $aes);?></td>
                                             </tr>
                                         <?php endwhile; ?>
                                         </tbody>

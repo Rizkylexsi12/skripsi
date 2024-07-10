@@ -1,8 +1,6 @@
 <?php
 require "include/connection.php";
-require "aes_new.php";
-
-$aes = new AES256();
+include 'looping_generator.php';
 
 $id = $_GET['id'];
 $sql = "SELECT * FROM pasien WHERE pasien_id = '$id'";
@@ -36,27 +34,27 @@ $row = $result->fetch_array();
                                     <div style="display: flex;">
                                         <div class="form-group" style="margin-right: 20px; width: 400px;">
                                             <label for="tinggiBadan">Nama Pasien</label>
-                                            <input type="text" class="form-control" name="no_ktp" value="<?=$aes->($row['nama_pasien']);?>" disabled>
+                                            <input type="text" class="form-control" name="no_ktp" value="<?=decrypt($row['nama_pasien'], $aes);?>" disabled>
                                         </div>
                                         <div class="form-group" style="margin-right: 20px; width: 400px;">
                                             <label for="beratBadan">Tanggal Lahir</label>
-                                            <input type="text" class="form-control" name="tempat_lahir" value="<?=$aes->($row['tempat_lahir']);?>" disabled>
+                                            <input type="text" class="form-control" name="tempat_lahir" value="<?=decrypt($row['tempat_lahir'], $aes);?>" disabled>
                                         </div>
                                         <div class="form-group" style="margin-right: 20px; width: 300px;">
                                             <label for="beratBadan">Jenis Kelamin</label>
-                                            <input type="date" class="form-control" name="tanggal_lahir" value="<?=$aes->($row['tanggal_lahir']);?>" disabled>
+                                            <input type="date" class="form-control" name="tanggal_lahir" value="<?=decrypt($row['tanggal_lahir'], $aes);?>" disabled>
                                         </div>
                                         <div class="form-group" style="width: 300px;">
                                             <label for="basicInput">Golongan Darah</label>
                                             <select class="form-control form-select" name="jenis_kelamin" disabled>
-                                                <option value="L" <?=$aes->(($row['jenis_kelamin']) == 'L') ? 'selected' : '';?>>Laki - Laki</option>
-                                                <option value="P" <?=$aes->(($row['jenis_kelamin']) == 'P') ? 'selected' : '';?>>Perempuan</option>
+                                                <option value="L" <?=decrypt($row['jenis_kelamin'], $aes) == 'L' ? 'selected' : '';?>>Laki - Laki</option>
+                                                <option value="P" <?=decrypt($row['jenis_kelamin'], $aes) == 'P' ? 'selected' : '';?>>Perempuan</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="basicInput">Riwayat Alergi</label>
-                                        <input type="text" class="form-control" name="riwayat_alergi" value="<?=$aes->($row['riwayat_alergi']);?>" disabled>
+                                        <input type="text" class="form-control" name="riwayat_alergi" value="<?=decrypt($row['riwayat_alergi'], $aes);?>" disabled>
                                     </div>
                                     <hr>
                                     <h3>Subjective</h3>
@@ -73,8 +71,8 @@ $row = $result->fetch_array();
                                     <div class="form-group">
                                         <label for="basicInput">Diagnosa</label>
                                         <select class="form-control form-select" name="diagnosa">
-                                            <option value="sakit_kepala">19.0 Sakit Kepala</option>
-                                            <option value="demam">29.5 Demam</option>
+                                            <option value="19.0 sakit kepala">19.0 Sakit Kepala</option>
+                                            <option value="29.5 demam">29.5 Demam</option>
                                         </select>
                                     </div>
                                     <h3>Plan</h3>

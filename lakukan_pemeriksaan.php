@@ -34,28 +34,29 @@
                                     <table class="table table-border table-striped mb-0" style="width: 1250px;margin-left: 30px;margin-right: 30px;">
                                         <?php
                                             include 'include/connection.php';
-                                            include 'aes_new.php';
-
-                                            $aes = new AES256();
+                                            include 'looping_generator.php';
 
                                             $search = isset($_GET['search']) ? $_GET['search'] : '';
 
                                             $sql = "SELECT * FROM pasien";
-                                            if ($search) {
-                                                $sql .= " WHERE nama_pasien LIKE '%" . $db->real_escape_string($search) . "%'";
-                                            }
                                             $result = $db->query($sql);
-                                            $i = 1;
-                                            $found = false;
-                                        
+
+                                            $data_pasien = [];
                                             while ($row = $result->fetch_object()) {
-                                                $found = true;
+                                                $decrypted_name = decrypt($row->nama_pasien, $aes);
+                                                if ($search && stripos($decrypted_name, $search) === false) {
+                                                    continue;
+                                                }
+                                                $data_pasien[] = [
+                                                    'id' => $row->pasien_id,
+                                                    'nama_pasien' => $decrypted_name,
+                                                    'tanggal_lahir' => decrypt($row->tanggal_lahir, $aes),
+                                                    'jenis_kelamin' => decrypt($row->jenis_kelamin, $aes),
+                                                    'golongan_darah' => decrypt($row->golongan_darah, $aes)
+                                                ];
                                             }
                                         
-                                            if ($found) {
-                                                // Reset result pointer and execute query again
-                                                $result = $db->query($sql);
-                                            
+                                            if (!empty($data_pasien)) {
                                                 echo '<div class="table-responsive">
                                                     <table class="table table-border table-striped mb-0" style="width: 1250px;margin-left: 30px;margin-right: 30px;">
                                                         <caption> Tabel User </caption>
@@ -68,21 +69,22 @@
                                                             <th class="text-center" style="width: 40px">Actions</th>
                                                         </tr>';
                                         
-                                                while ($row = $result->fetch_object()) {
+                                                $i = 1;
+                                                foreach ($data_pasien as $pasien) {
                                                     echo "<tr>
                                                         <td class='text-center'>" . ($i++) . "</td>
-                                                        <td class='text-center'>". $aes->decrypt($row->nama_pasien) ."</td>
-                                                        <td class='text-center'>". $aes->decrypt($row->tanggal_lahir) ."</td>
-                                                        <td class='text-center'>". $aes->decrypt($row->jenis_kelamin) ."</td>
-                                                        <td class='text-center'>". $aes->decrypt($row->golongan_darah) ."</td>
+                                                        <td class='text-center'>". $pasien['nama_pasien'] ."</td>
+                                                        <td class='text-center'>". $pasien['tanggal_lahir'] ."</td>
+                                                        <td class='text-center'>". $pasien['jenis_kelamin'] ."</td>
+                                                        <td class='text-center'>". $pasien['golongan_darah'] ."</td>
                                                         <td class='text-center'>
                                                             <div class='btn-group mb-1'>
                                                                 <div class='dropdown text-center'>
                                                                     <button class='btn btn-outline-primary btn-sm' type='button'>
-                                                                        <a href='detail_pemeriksaan.php?id={$row->pasien_id}' style='text-decoration: none; color: inherit;'>Detail</a>
+                                                                        <a href='detail_pemeriksaan.php?id={$pasien['id']}' style='text-decoration: none; color: inherit;'>Detail</a>
                                                                     </button>
                                                                     <button class='btn btn-success btn-sm' type='button'>
-                                                                        <a href='input_pemeriksaan.php?id={$row->pasien_id}' style='text-decoration: none; color: inherit;'>Periksa</a>
+                                                                        <a href='input_pemeriksaan.php?id={$pasien['id']}' style='text-decoration: none; color: inherit;'>Periksa</a>
                                                                     </button>
                                                                 </div>
                                                             </div>
