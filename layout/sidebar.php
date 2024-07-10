@@ -12,7 +12,7 @@
         </div>
         <div class="sidebar-menu">
             <ul class="menu">
-                <li class="sidebar-title">Menu</li>
+                <li class="sidebar-title"><h3>Hi, <?php echo $_SESSION['username'] ?></h3></li>
                 <li class="sidebar-item">
                     <a href="./" class='sidebar-link'>
                         <i class="bi bi-grid-fill" style="color: #1babe2;"></i>
@@ -25,9 +25,14 @@
                         <span style="color: #1babe2;">Data</span>
                     </a>
                     <ul class="submenu">
-                        <li class="submenu-item ">
+                        <?php if ($_SESSION['role'] == 'petugas') { ?>
+                            <li class="submenu-item ">
+                                <a href="user.php" style="color: #1babe2;">Master User</a>
+                            </li>
+                        <?php } ?>
+                        <!-- <li class="submenu-item ">
                             <a href="user.php" style="color: #1babe2;">Master User</a>
-                        </li>
+                        </li> -->
                         <li class="submenu-item ">
                             <a href="pasien.php" style="color: #1babe2;">Master Pasien</a>
                         </li>

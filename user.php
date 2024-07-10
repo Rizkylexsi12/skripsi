@@ -3,6 +3,7 @@
     <?php
         require "layout/head.php";
         require "include/connection.php";
+        include 'looping_generator.php';
     ?>
 <body>
     <div id="app">
@@ -38,9 +39,6 @@
                                 <div class="table-responsive">
                                     <table class="table table-border table-striped mb-0" style="width: 1250px; margin: 0px 30px;">
                                         <?php
-                                            include 'include/connection.php';
-                                            include 'looping_generator.php';
-
                                             $search = isset($_GET['search']) ? $_GET['search'] : '';
 
                                             $sql = 'SELECT * FROM user';

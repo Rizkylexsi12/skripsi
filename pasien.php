@@ -90,14 +90,14 @@
                                                                     </button>
                                                                     <button class='btn btn-secondary btn-sm' type='button'>
                                                                         <a href='pasien_edit.php?id={$pasien['id']}' style='text-decoration: none; color: inherit;'>Edit</a>
-                                                                    </button>
-                                                                    <button class='btn btn-danger btn-sm' type='button'>
+                                                                    </button>";
+                        if ($_SESSION['role'] == 'petugas') { echo "<button class='btn btn-danger btn-sm' type='button' style='margin-left: 5px;'>
                                                                         <a href='pasien_hapus.php?id={$pasien['id']}' style='text-decoration: none; color: inherit;'>Delete</a>
-                                                                    </button>
-                                                                </div>
+                                                                    </button>"; }
+                                                           echo "</div>
                                                             </div>
                                                         </td>
-                                                      </tr>\n";
+                                                    </tr>\n";
                                                 }
                                             
                                                 echo '</table>

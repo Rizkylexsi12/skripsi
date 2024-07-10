@@ -29,7 +29,7 @@ $row = $result->fetch_array();
                         <div class="row">
                             <div class="col">
                                 <form action="input_pemeriksaan_action.php" method="POST">
-                                    <input type="hidden" name="user_id" value="<?=$user_id;?>">
+                                    <input type="hidden" name="user_id" value="<?=$_SESSION['user_id'];?>">
                                     <input type="hidden" name="pasien_id" value="<?=$id;?>">
                                     <div style="display: flex;">
                                         <div class="form-group" style="margin-right: 20px; width: 400px;">
