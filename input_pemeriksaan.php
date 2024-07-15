@@ -71,8 +71,15 @@ $row = $result->fetch_array();
                                     <div class="form-group">
                                         <label for="basicInput">Diagnosa</label>
                                         <select class="form-control form-select" name="diagnosa">
-                                            <option value="19.0 sakit kepala">19.0 Sakit Kepala</option>
-                                            <option value="29.5 demam">29.5 Demam</option>
+                                            <option value="A01.2 PARATYPHOID FEVER B">A01.2 PARATYPHOID FEVER B</option>
+                                            <option value="A06 AMOEBIASIS">A06 AMOEBIASIS</option>
+                                            <option value="A06.0 ACUTE AMEBIC DYSENTERY">A06.0 ACUTE AMEBIC DYSENTERY</option>
+                                            <option value="A06.1 Chronic Intenstinal Amebiasis">A06.1 CHRONIC INTESTINAL AMEBIASIS</option>
+                                            <option value="A75 TYPHUS FEVER">A75 TYPHUS FEVER</option>
+                                            <option value="R07.3 OTHER CHEST PAIN">R07.3 OTHER CHEST PAIN</option>
+                                            <option value="R51 HEADACHE">R51 HEADACHE</option>
+                                            <option value="R10.1 PAIN LOCALIZED TO UPPER ABDOMEN">R10.1 PAIN LOCALIZED TO UPPER ABDOMEN</option>
+                                            <option value="M54.5 LOW BACK PAIN">M54.5 LOW BACK PAIN</option>
                                         </select>
                                     </div>
                                     <h3>Plan</h3>

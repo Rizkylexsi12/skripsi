@@ -121,41 +121,27 @@ class AES {
 	var $Nr; 		// Jumlah Looping / Putaran
 	var $log;
 
-	# Parameter $z = key AES
-	function AES($z) {
+	function AES($kunci) {
 		$this->Nb = 4; // Blok data AES
+		$this->Nk = strlen($kunci) / 4; // Menghitung pengelompokan AES-128, AES-192, AES-256
 
-		# Menghitung Panjang Key 
-		# Panjang Key AES (16, 24, 32)
-		# untuk mengelompokkan jenis AES (AES-128, AES-192, AES-256)
-		$this->Nk = strlen($z) / 4;
+		if ($this->Nk != 4 && $this->Nk != 6 && $this->Nk != 8) {
+			die("Key is " . ($this->Nk * 32) . " bits long. *not* 128, 192, or 256."); // Sebagai validasi agar sesuai dengan panjang AES yang telah ditentukan
+		}
 
-		# Validasi untuk memfilter panjang key
-		if ($this->Nk != 4 && $this->Nk != 6 && $this->Nk != 8)
-			die("Key is " . ($this->Nk * 32) . " bits long. *not* 128, 192, or 256.");
-
-		# Jumlah Putaran / looping pada proses enkripsi & dekripsi
-		$this->Nr = $this->Nk + $this->Nb + 2;
-
-		# Nb*(Nr+1) 32-bit words
-		$this->w = array();
-		# 2-D array of Nb colums and 4 rows
-		$this->s = array(array());
-
-		# memanggil function keyexpansion() yang ada di class AES
-		$this->keyexpansion($z);
+		$this->Nr = $this->Nk + $this->Nb + 2; // Untuk menentukan jumlah putaran enkripsi & dekripsi
+		$this->w = array(); // Nb*(Nr+1) 32-bit words
+		$this->s = array(array()); // 2-D array of Nb colums and 4 rows
+		$this->keyexpansion($kunci); // Melakukan key ekspansi
 	}
 
-	# function yang berhubungan : 
-	#	addRoundKey(), subByte(), ShiftRow(), MixColumns()
 	function encrypt($input) {
-		# memecah inputan/data ke dalam bentuk String
 		$data = str_split($input);
-
 		$state = array();
 		$count 	= 0;
 		$this->pos_w = 0;
 
+		// Memasukan kedalam Blok Data (State)
 		for ($i = 0; $i < 4; $i++) {
 			for ($j = 0; $j < 4; $j++) {
 				if ($count < count($data)) {
@@ -163,12 +149,11 @@ class AES {
 				} else {
 					$this->state[$i][$j] = 0;
 				}
-
 				$count++;
 			}
 		}
 
-		// AddRoundKey #1
+		// Inisiasi AddRoundKey
 		for ($i = 0; $i < 4; $i++) {
 			for ($j = 0; $j < $this->Nb; $j++) {
 				$this->state[$i][$j] = $this->state[$i][$j] ^ $this->w[$i][$this->pos_w + $j];
@@ -176,9 +161,8 @@ class AES {
 		}
 		$this->pos_w = $this->pos_w + $this->Nb;
 
+		// Proses Looping Enkripsi
 		$this->output = "";
-
-		# Proses Utama Enkripsi
 		for ($i = 0; $i < $this->Nr - 1; $i++) {
 			$putaran = $i + 1;
 			$this->output .= "<br>Putaran ke-{$putaran}:<br>";
@@ -196,6 +180,8 @@ class AES {
 			$this->output .= "AddRoundKey:<br>" . json_encode($this->state) . "<br>";
 			$this->pos_w = $this->pos_w + $this->Nb;
 		}
+
+		// Putaran Terakhir
 		$putaran = $i + 1;
 		$this->output .= "<br>Putaran ke-{$putaran}:<br>";
 
@@ -208,7 +194,6 @@ class AES {
 		$this->state = $this->AddRoundKey($this->state);
 		$this->output .= "AddRoundKey:<br>" . json_encode($this->state) . "<br>";
 
-		# Proses mengubah karakter biasa menjadi Randomize ASCII
 		$cipher = "";
 		foreach ($this->state as $state) {
 			foreach ($state as $data) {
@@ -220,12 +205,12 @@ class AES {
 
 	function decrypt($input) {
 		$data = str_split($input);
-
 		$state = array();
 		$count 	= 0;
 		$this->pos_w = (($this->Nr + 1) * 4);
 		$modulo = 0;
 
+		
 		for ($i = 0; $i < 4; $i++) {
 			for ($j = 0; $j < 4; $j++) {
 				$this->state[$i][$j] = ord($data[$count]);
@@ -233,7 +218,7 @@ class AES {
 			}
 		}
 
-		// AddRoundKey #1
+		// Inisiasi AddRoundKey
 		$this->pos_w = ($this->pos_w) - 4;
 		for ($i = 0; $i < 4; $i++) {
 			$x = 0;
@@ -245,6 +230,7 @@ class AES {
 			}
 		}
 
+		// Proses Looping Dekripsi
 		for ($i = 0; $i < $this->Nr - 1; $i++) {
 
 			$this->state = $this->InvShiftRow($this->state);
@@ -257,6 +243,7 @@ class AES {
 			$this->state = $this->InvMixColumns($this->state);
 		}
 
+		// Putaran Terakhir
 		$this->state = $this->InvShiftRow($this->state);
 
 		$this->state = $this->InvSubByte($this->state);
@@ -265,7 +252,6 @@ class AES {
 		$this->state = $this->AddRoundKey($this->state);
 
 
-		#Randomize ASCII
 		$plain = "";
 		foreach ($this->state as $state) {
 			foreach ($state as $data) {
@@ -376,99 +362,164 @@ class AES {
 	}
 
 	# function untuk melakukan Generate Key
+	// function keyexpansion($key) {
+
+	// 	# memecah String menjadi Array per karakter
+	// 	$arrkey = str_split($key);
+	// 	# variable untuk kursor index String Key
+	// 	$count 	= 0;
+
+	// 	# konstanta Rcon
+	// 	static $rcon = array(
+	// 		array(0x01, 0x00, 0x00, 0x00),
+	// 		array(0x02, 0x00, 0x00, 0x00),
+	// 		array(0x04, 0x00, 0x00, 0x00),
+	// 		array(0x08, 0x00, 0x00, 0x00),
+	// 		array(0x10, 0x00, 0x00, 0x00),
+	// 		array(0x20, 0x00, 0x00, 0x00),
+	// 		array(0x40, 0x00, 0x00, 0x00),
+	// 		array(0x80, 0x00, 0x00, 0x00),
+	// 		array(0x1b, 0x00, 0x00, 0x00),
+	// 		array(0x36, 0x00, 0x00, 0x00)
+	// 	);
+
+	// 	# Salin Key ke variable w (Key Schedule)
+	// 	# ord() : untuk mendapatkan nilai ASCII dari suatu karakter
+	// 	for ($i = 0; $i < $this->Nb; $i++) {
+	// 		for ($j = 0; $j < 4; $j++) {
+	// 			$this->w[$i][$j] = ord($arrkey[$count]);
+	// 			$count++;
+	// 		}
+	// 	}
+
+	// 	# posisi cursor rcon()
+	// 	$count_rcon = 0;
+	// 	# proses Generate Key
+	// 	# function yang berhubungan : subword() , rotword()
+	// 	for ($i = 4; $i < 44; $i++) {
+	// 		for ($j = 0; $j < 4; $j++) {
+	// 			# mengambil nilai columns w(i-1)
+	// 			$wmin1	= $this->w[$j][$i - 1];
+	// 			# mengambil nilai columns w(i-4)
+	// 			$wmin4	= $this->w[$j][$i - 4];
+
+	// 			# melakukan pengecekan apakah i merupakan awal dari block
+	// 			if ($i % 4 == 0) {
+	// 				# Proses rotword()
+	// 				if ($j != 3)
+	// 					$wmin1	= $this->w[$j + 1][$i - 1];
+	// 				else
+	// 					$wmin1	= $this->w[0][$i - 1];
+
+	// 				# melakukan XOR pada : w(i-1) XOR w(i-4) XOR rcon()
+	// 				# w(i-1) mengalami proses subword() : pertukaran dengan data dari table sBox
+	// 				$this->w[$j][$i] = $this->subword($wmin1) ^ $wmin4 ^ $rcon[$count_rcon][$j];
+
+	// 				# cursor rcon() berpindah ke rcon selanjutnya
+	// 				if ($j == 3) $count_rcon++;
+	// 			} else {
+	// 				# bukan merupakan awal block
+	// 				# melakukan XOR pada : w(i-1) XOR w(i-4)
+	// 				$this->w[$j][$i] = $wmin1 ^ $wmin4;
+	// 			}
+	// 		}
+	// 	}
+	// 	# mengembalikan nilai array w[][] setelah mengalami proses keyexpansion
+	// 	return $this->w;
+	// }
+
+	// function rotword($w, $row, $col) {
+	// 	return (($row == 0) ? $w[3][$col] : $w[$row - 1][$col]);
+	// }
+
+	// function subword($byte) {
+	// 	if (strlen(dechex($byte)) == 2) {
+	// 		$hex 	= str_split(dechex($byte));
+
+	// 		$r		= hexdec($hex[0]);
+	// 		$c		= hexdec($hex[1]);
+	// 	} else {
+	// 		$r = 0;
+	// 		$c = $byte;
+	// 	}
+
+	// 	return $this->sBox[$r][$c];
+	// }
+
 	function keyexpansion($key) {
+        $arrkey = str_split($key);
+        $count = 0;
 
-		# memecah String menjadi Array per karakter
-		$arrkey = str_split($key);
-		# variable untuk kursor index String Key
-		$count 	= 0;
+        static $rcon = array(
+            array(0x01, 0x00, 0x00, 0x00),
+            array(0x02, 0x00, 0x00, 0x00),
+            array(0x04, 0x00, 0x00, 0x00),
+            array(0x08, 0x00, 0x00, 0x00),
+            array(0x10, 0x00, 0x00, 0x00),
+            array(0x20, 0x00, 0x00, 0x00),
+            array(0x40, 0x00, 0x00, 0x00),
+            array(0x80, 0x00, 0x00, 0x00),
+            array(0x1b, 0x00, 0x00, 0x00),
+            array(0x36, 0x00, 0x00, 0x00)
+        );
 
-		# konstanta Rcon
-		static $rcon = array(
-			array(0x01, 0x00, 0x00, 0x00),
-			array(0x02, 0x00, 0x00, 0x00),
-			array(0x04, 0x00, 0x00, 0x00),
-			array(0x08, 0x00, 0x00, 0x00),
-			array(0x10, 0x00, 0x00, 0x00),
-			array(0x20, 0x00, 0x00, 0x00),
-			array(0x40, 0x00, 0x00, 0x00),
-			array(0x80, 0x00, 0x00, 0x00),
-			array(0x1b, 0x00, 0x00, 0x00),
-			array(0x36, 0x00, 0x00, 0x00)
-		);
+		// Masukan key kedalam array w
+        for ($i = 0; $i < $this->Nk; $i++) {
+            for ($j = 0; $j < 4; $j++) {
+                $this->w[$i][$j] = ord($arrkey[$count]); //ord berfungsi untuk merubah ke format ASCII
+                $count++;
+            }
+        }
 
-		# Salin Key ke variable w (Key Schedule)
-		# ord() : untuk mendapatkan nilai ASCII dari suatu karakter
-		for ($i = 0; $i < $this->Nb; $i++) {
-			for ($j = 0; $j < 4; $j++) {
-				$this->w[$i][$j] = ord($arrkey[$count]);
-				$count++;
-			}
-		}
+        $count_rcon = 0;
 
-		# posisi cursor rcon()
-		$count_rcon = 0;
-		# proses Generate Key
-		# function yang berhubungan : subword() , rotword()
-		for ($i = 4; $i < 44; $i++) {
-			for ($j = 0; $j < 4; $j++) {
-				# mengambil nilai columns w(i-1)
-				$wmin1	= $this->w[$j][$i - 1];
-				# mengambil nilai columns w(i-4)
-				$wmin4	= $this->w[$j][$i - 4];
+        // Proses Generate Key Expansion
+        for ($i = $this->Nk; $i < $this->Nb * ($this->Nr + 1); $i++) {
+            $temp = array();
+            for ($j = 0; $j < 4; $j++) {
+                $temp[$j] = $this->w[$i - 1][$j];
+            }
 
-				# melakukan pengecekan apakah i merupakan awal dari block
-				if ($i % 4 == 0) {
-					# Proses rotword()
-					if ($j != 3)
-						$wmin1	= $this->w[$j + 1][$i - 1];
-					else
-						$wmin1	= $this->w[0][$i - 1];
+            if ($i % $this->Nk == 0) {
+                $temp = $this->rotword($temp);
+                for ($j = 0; $j < 4; $j++) {
+                    $temp[$j] = $this->subword($temp[$j]);
+                }
+                for ($j = 0; $j < 4; $j++) {
+                    $temp[$j] ^= $rcon[$count_rcon][$j];
+                }
+                $count_rcon++;
+            } else if ($this->Nk > 6 && $i % $this->Nk == 4) {
+                for ($j = 0; $j < 4; $j++) {
+                    $temp[$j] = $this->subword($temp[$j]);
+                }
+            }
 
-					# melakukan XOR pada : w(i-1) XOR w(i-4) XOR rcon()
-					# w(i-1) mengalami proses subword() : pertukaran dengan data dari table sBox
-					$this->w[$j][$i] = $this->subword($wmin1) ^ $wmin4 ^ $rcon[$count_rcon][$j];
+            for ($j = 0; $j < 4; $j++) {
+                $this->w[$i][$j] = $this->w[$i - $this->Nk][$j] ^ $temp[$j];
+            }
+        }
 
-					# cursor rcon() berpindah ke rcon selanjutnya
-					if ($j == 3) $count_rcon++;
-				} else {
-					# bukan merupakan awal block
-					# melakukan XOR pada : w(i-1) XOR w(i-4)
-					$this->w[$j][$i] = $wmin1 ^ $wmin4;
-				}
-			}
-		}
-		# mengembalikan nilai array w[][] setelah mengalami proses keyexpansion
-		return $this->w;
-	}
+        return $this->w;
+    }
 
-	function rotword($w, $row, $col) {
-		return (($row == 0) ? $w[3][$col] : $w[$row - 1][$col]);
-	}
+    function rotword($word) {
+        return array($word[1], $word[2], $word[3], $word[0]);
+    }
 
-	function subword($byte) {
-		# menghitung panjang inputan yang sudah dikonversikan menjadi HEX
-		# jika panjang inputan 2
-		if (strlen(dechex($byte)) == 2) {
-			# konversi inputan kedalam bentuk HEX
-			# memecah inputan menjadi array
-			$hex 	= str_split(dechex($byte));
+    function subword($byte) {
+        if (strlen(dechex($byte)) == 2) {
+            $hex = str_split(dechex($byte));
 
-			# karakter ke-1 menjadi index baris
-			$r		= hexdec($hex[0]);
-			# karakter ke-2 menjadi index kolom
-			$c		= hexdec($hex[1]);
-		} else {
-			# jika panjang inputan 1
-			$r = 0;
-			# inputan menjadi index kolom
-			$c = $byte;
-		}
+            $r = hexdec($hex[0]);
+            $c = hexdec($hex[1]);
+        } else {
+            $r = 0;
+            $c = $byte;
+        }
 
-		# mengembalikan nilai table sBox berdasarkan index baris & kolom
-		# r : baris | c : kolom
-		return $this->sBox[$r][$c];
-	}
+        return $this->sBox[$r][$c];
+    }
 
 	function invSub($byte) {
 		if (strlen(dechex($byte)) == 2) {

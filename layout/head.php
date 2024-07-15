@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
     <link rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="assets/css/app.css">
-    <link rel="shortcut icon" href="assets/images/favicon-idn.ico" type="image/x-icon">
+    <link rel="icon" href="https://zicare.id/upload/website/favicon.png" type="image/png">
     <link rel="stylesheet" href="path/to/your/css/file.css"> <!-- Optional: Add your CSS file for styling -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- jQuery library -->
 </head>

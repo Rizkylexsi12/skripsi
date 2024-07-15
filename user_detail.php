@@ -56,7 +56,7 @@
                                             </div>
                                             <div class="form-group" style="flex-grow: 2; margin-right: 10px;">
                                                 <label for="tanggal_lahir">Tanggal Lahir</label>
-                                                <input type="date" class="form-control" name="tanggal_lahir" value="<?=decrypt($row['tanggal_lahir'], $aes);?>" disabled>
+                                                <input type="text" class="form-control" name="tanggal_lahir" value="<?=decrypt($row['tanggal_lahir'], $aes);?>" disabled>
                                             </div>
                                             <div class="form-group" style="flex-grow: 2;">
                                                 <label for="jenis_kelamin">Jenis Kelamin</label>

@@ -39,7 +39,7 @@
                                     </div>
                                     <div class="form-group" style="margin-right: 20px; width: 300px;">
                                         <label for="beratBadan">Tanggal Lahir</label>
-                                        <input type="date" class="form-control" name="tanggal_lahir" value="<?=decrypt($row['tanggal_lahir'], $aes);?>" disabled>
+                                        <input type="text" class="form-control" name="tanggal_lahir" value="<?=decrypt($row['tanggal_lahir'], $aes);?>" disabled>
                                     </div>
                                     <div class="form-group" style="width: 300px;">
                                         <label for="basicInput">Jenis Kelamin</label>
