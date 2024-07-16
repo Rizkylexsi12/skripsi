@@ -5,6 +5,14 @@
         require "include/connection.php";
         include 'looping_generator.php';
     ?>
+    <!-- <?php
+        session_start();
+        if (isset($_SESSION['message'])) {
+            $message = $_SESSION['message'];
+            echo "<script type='text/javascript'>alert('$message');</script>";
+            unset($_SESSION['message']);
+        }
+    ?> -->
 <body>
     <div id="app">
         <?php require "layout/sidebar.php";?>

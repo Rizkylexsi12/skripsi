@@ -2,6 +2,7 @@
     require "include/connection.php";
     include "looping_generator.php";
 
+    // $awal = microtime(true);
     $username = $_POST['username'];
     $role = $_POST['role'];
     $password = $_POST['password'];
@@ -37,6 +38,10 @@
     $sql = "INSERT INTO user (username, role, password, nama_lengkap, nik, nomor_ktp, tempat_lahir, tanggal_lahir, jenis_kelamin, alamat, nomor_telepon, nomor_str, tanggal_str, nomor_sip, tanggal_sip) VALUES ('$encrypt_username', '$encrypt_role', '$encrypt_password', '$encrypt_nama_lengkap', '$encrypt_nik', '$encrypt_no_ktp', '$encrypt_tempat_lahir', '$encrypt_tanggal_lahir', '$encrypt_jenis_kelamin', '$encrypt_alamat', '$encrypt_no_telepon', '$encrypt_nomor_str', '$encrypt_tanggal_str', '$encrypt_nomor_sip', '$encrypt_tanggal_sip')";
     
     if ($db->query($sql) === true) {
+        // $akhir = microtime(true);
+        // $lama = $akhir - $awal;
+        // session_start();
+        // $_SESSION['message'] = "Lama eksekusi script adalah: " . $lama . " detik";
         header("location:user.php");
     } else {
         echo "Error: " . $sql . "<br>" . $db->error;
